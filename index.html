@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Company · User Management</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.3/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.11.3/font/bootstrap-icons.min.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="index.css">
+</head>
+<body>
+
+<div class="topbar">
+  <button class="sidebar-toggle" id="sidebarToggle"><i class="bi bi-list"></i></button>
+  <div class="brand"><i class="bi bi-grid-fill"></i> Company</div>
+  <nav class="topnav">
+    <a href="#" class="active">Home</a>
+    <a href="#">Leads on Demand</a>
+    <a href="#">Sales on Demand</a>
+    <a href="#">Opportunities</a>
+    <a href="#">Content on Demand</a>
+    <a href="#">Support on Demand</a>
+    <a href="#">Reports on Demand</a>
+    <a href="#">Module 1</a>
+    <a href="#">Module 2</a>
+  </nav>
+  <div class="icons">
+    <i class="bi bi-search"></i>
+    <div class="avatar">M</div>
+  </div>
+</div>
+
+<div class="sidebar-backdrop" id="backdrop"></div>
+<div class="shell">
+  <aside class="sidebar" id="sidebar">
+    <div class="item"><i class="bi bi-info-circle"></i> Getting Started</div>
+    <div class="item active-group"><i class="bi bi-people-fill"></i> User Management</div>
+    <div class="sub">
+      <a href="#" class="active">Edit Users</a>
+      <a href="#">Edit Workgroups</a>
+    </div>
+    <div class="item"><i class="bi bi-folder2-open"></i> File Management</div>
+    <div class="item"><i class="bi bi-diagram-3"></i> Site Management</div>
+    <div class="item"><i class="bi bi-megaphone"></i> Marketing Management</div>
+    <div class="item"><i class="bi bi-person-badge"></i> CRM Management</div>
+    <div class="item"><i class="bi bi-bar-chart-line"></i> Critical Metrics</div>
+  </aside>
+
+  <main class="main">
+    <div class="page-head">
+      <h1>User Management · Edit Users</h1>
+      <button class="btn btn-accent btn-sm" data-bs-toggle="modal" data-bs-target="#userModal" id="addUserBtn"><i class="bi bi-plus-lg"></i> Add User</button>
+    </div>
+
+    <div class="card-panel">
+      <div class="toolbar">
+        <div class="search-box">
+          <i class="bi bi-search"></i>
+          <input type="text" class="form-control form-control-sm" id="searchInput" placeholder="Search by name, username or email">
+        </div>
+        <button class="btn btn-outline-secondary btn-sm" id="filterToggle"><i class="bi bi-funnel"></i> Filters</button>
+        <button class="btn btn-link btn-sm text-decoration-none" id="clearFilters">Clear Filters</button>
+        <span class="text-muted small ms-auto" id="resultCount"></span>
+      </div>
+      <div class="filters-row" id="filtersRow">
+        <select class="form-select form-select-sm" id="statusFilter">
+          <option value="">Status: All</option>
+          <option value="Active">Active</option>
+          <option value="Inactive">Inactive</option>
+          <option value="Pending">Pending</option>
+        </select>
+        <select class="form-select form-select-sm" id="regionFilter"><option value="">Region: All</option></select>
+        <select class="form-select form-select-sm" id="divisionFilter"><option value="">Division: All</option></select>
+      </div>
+      <div class="table-wrap">
+        <table class="users">
+          <thead>
+            <tr>
+              <th>ID</th><th>First Name</th><th>Last Name</th><th>Username/Email</th>
+              <th>Group</th><th>Division</th><th>Region</th><th>User Type</th>
+              <th>Status</th><th>Submitted Date</th><th>Enabled Date</th><th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="tableBody"></tbody>
+        </table>
+      </div>
+      <div class="pagination-bar">
+        <div id="pageInfo"></div>
+        <nav><ul class="pagination pagination-sm mb-0" id="pagination"></ul></nav>
+      </div>
+    </div>
+  </main>
+</div>
+
+<!-- Add/Edit User Modal -->
+<div class="modal fade" id="userModal" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <form id="userForm">
+        <div class="modal-header">
+          <h5 class="modal-title" id="modalTitle">Add User</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          <input type="hidden" id="userId">
+          <div class="row g-2">
+            <div class="col-6"><label class="form-label small">First Name</label><input required class="form-control form-control-sm" id="fFirst"></div>
+            <div class="col-6"><label class="form-label small">Last Name</label><input required class="form-control form-control-sm" id="fLast"></div>
+            <div class="col-12"><label class="form-label small">Username/Email</label><input required type="email" class="form-control form-control-sm" id="fEmail"></div>
+            <div class="col-6"><label class="form-label small">Group</label>
+              <select class="form-select form-select-sm" id="fGroup"><option>Admin</option><option>Licensed</option><option>Forward</option><option>Derivative</option><option>Peculiar</option></select></div>
+            <div class="col-6"><label class="form-label small">Division</label>
+              <select class="form-select form-select-sm" id="fDivision"><option>Corporate</option><option>West</option><option>South</option><option>National</option></select></div>
+            <div class="col-6"><label class="form-label small">Region</label>
+              <select class="form-select form-select-sm" id="fRegion"><option>NY</option><option>CA</option><option>TX</option><option>FL</option><option>WA</option></select></div>
+            <div class="col-6"><label class="form-label small">User Type</label>
+              <select class="form-select form-select-sm" id="fType"><option>Corporate</option><option>Recruiter</option><option>Manager</option></select></div>
+            <div class="col-6"><label class="form-label small">Status</label>
+              <select class="form-select form-select-sm" id="fStatus"><option>Active</option><option>Inactive</option><option>Pending</option></select></div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-sm btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
+          <button type="submit" class="btn btn-sm btn-accent">Save User</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="deleteModal" tabindex="-1">
+  <div class="modal-dialog modal-sm">
+    <div class="modal-content">
+      <div class="modal-body">
+        <p class="mb-1 fw-semibold">Delete this user?</p>
+        <p class="text-muted small mb-0" id="deleteUserName"></p>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-sm btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
+        <button class="btn btn-sm btn-danger" id="confirmDelete">Delete</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="toast-container position-fixed bottom-0 end-0 p-3">
+  <div id="toast" class="toast align-items-center text-white bg-dark border-0" role="alert">
+    <div class="d-flex"><div class="toast-body" id="toastBody"></div>
+    <button class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button></div>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/js/bootstrap.bundle.min.js"></script>
+<script src="index.js"></script>
+</body>
+</html>
